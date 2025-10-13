@@ -1,20 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: toandrad <toandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:56:03 by toandrad          #+#    #+#             */
-/*   Updated: 2025/10/10 11:29:15 by toandrad         ###   ########.fr       */
+/*   Updated: 2025/10/13 14:06:16 by toandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minitalk.h"
 
+static void	check_pid(int pid)
+{
+	if (pid <= 0)
+	{
+		ft_printf("Error: Invalid PID\n");
+		exit(1);
+	}
+}
+
+static void	send_char(char c, int pid)
+{
+	int	bit;
+
+	bit = 0;
+	while (bit < 8)
+	{
+		if (c & (1 << bit))
+		{
+			if (kill(pid, SIGUSR2) == -1)
+			{
+				perror("Error");
+				exit(1);
+			}
+		}
+		else
+		{
+			if (kill(pid, SIGUSR1) == -1)
+			{
+				perror("Error");
+				exit(1);
+			}
+		}
+		usleep(1000);
+		bit++;
+	}
+}
+
 int	main(int ac, char **av)
 {
-	if (ac == 3 || av[0][1] == 'a')
-		ft_printf("hey");
-	ft_printf("client");
+	int		pid;
+	char	*string;
+	int		i;
+
+	if (ac != 3)
+	{
+		ft_printf("Error: Wrong amount of arguments");
+		return (1);
+	}
+	pid = ft_atoi(av[1]);
+	string = av[2];
+	check_pid(pid);
+	i = 0;
+	while (string[i])
+	{
+		send_char(string[i], pid);
+		i++;
+	}
 }
