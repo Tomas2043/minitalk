@@ -6,7 +6,7 @@
 /*   By: toandrad <toandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:56:03 by toandrad          #+#    #+#             */
-/*   Updated: 2025/10/13 14:06:16 by toandrad         ###   ########.fr       */
+/*   Updated: 2025/11/19 11:43:34 by toandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static void	send_char(char c, int pid)
 {
 	int	bit;
 
-	bit = 0;
-	while (bit < 8)
+	bit = 7;
+	while (bit >= 0)
 	{
 		if (c & (1 << bit))
 		{
@@ -45,7 +45,7 @@ static void	send_char(char c, int pid)
 			}
 		}
 		usleep(1000);
-		bit++;
+		bit--;
 	}
 }
 
@@ -69,4 +69,5 @@ int	main(int ac, char **av)
 		send_char(string[i], pid);
 		i++;
 	}
+	send_char('\0', pid);
 }
