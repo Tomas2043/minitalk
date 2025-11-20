@@ -6,7 +6,7 @@
 /*   By: toandrad <toandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:56:03 by toandrad          #+#    #+#             */
-/*   Updated: 2025/11/19 11:43:34 by toandrad         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:55:15 by toandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ static void	check_pid(int pid)
 	if (pid <= 0)
 	{
 		ft_printf("Error: Invalid PID\n");
+		exit(1);
+	}
+	if (kill(pid, 0) == -1)
+	{
+		ft_printf("Error: Process %d not found or cannot receive signals.\n", pid);
 		exit(1);
 	}
 }
