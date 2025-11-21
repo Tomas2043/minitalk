@@ -6,7 +6,7 @@
 /*   By: toandrad <toandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:55:59 by toandrad          #+#    #+#             */
-/*   Updated: 2025/11/19 11:26:56 by toandrad         ###   ########.fr       */
+/*   Updated: 2025/11/21 14:15:42 by toandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ t_server	g_server;
 
 static void	handle_signal(int signal)
 {
-	g_server.current_char = (g_server.current_char << 1) | (signal == SIGUSR2);
+	g_server.current_char = g_server.current_char << 1;
+	if (signal == SIGUSR2)
+		g_server.current_char = g_server.current_char | 1;
+	else
+		g_server.current_char = g_server.current_char | 0;
 	g_server.bit_count++;
 	if (g_server.bit_count == 8)
 	{
